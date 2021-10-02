@@ -1,2 +1,3 @@
-# Artificial_Intelligence_Course_Projects
-🎓💻University of Tehran AI Course Projects - Fall 2021
+# Artificial Intelligence Course Projects
+This repository contains my Artificial Intelligence Course Projects (Fall 2021) at University of Tehran.
+
