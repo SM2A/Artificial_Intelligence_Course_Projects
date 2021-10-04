@@ -31,7 +31,7 @@ nan_data = initial_data[initial_data.CO2EMISSIONS.isna()]
 # print(f"CO2 Emotion < 240 : {co2_240_sum/co2_240_sum}")
 # print(f"CO2 Emotion > 300 : {co2_300_sum/co2_300_count}")
 
-initial_data['FUELCONSUMPTION_CITY'].hist(grid=True,legend=True)
+# initial_data['FUELCONSUMPTION_CITY'].hist(grid=True,legend=True)
 # pyplot.subplot(1)
 # initial_data['ENGINESIZE'].hist(grid=True)
 # pyplot.suptitle("Fuel Consumption City Histogram")
@@ -74,4 +74,15 @@ initial_data['FUELCONSUMPTION_CITY'].hist(grid=True,legend=True)
 # pyplot.ylabel("Frequency")
 # pyplot.xlabel("Fuel Consumption")
 
+# initial_data.hist(column=['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_CITY','FUELCONSUMPTION_HWY',
+#                           'FUELCONSUMPTION_COMB','FUELCONSUMPTION_COMB_MPG','CO2EMISSIONS'],figsize=(10,10))
 
+normalized_data = initial_data
+normalized_data['ENGINESIZE'] = (initial_data['ENGINESIZE']-initial_data['ENGINESIZE'].mean())/initial_data['ENGINESIZE'].std()
+normalized_data['CYLINDERS'] = (initial_data['CYLINDERS']-initial_data['CYLINDERS'].mean())/initial_data['CYLINDERS'].std()
+normalized_data['FUELCONSUMPTION_CITY'] = (initial_data['FUELCONSUMPTION_CITY']-initial_data['FUELCONSUMPTION_CITY'].mean())/initial_data['FUELCONSUMPTION_CITY'].std()
+normalized_data['FUELCONSUMPTION_HWY'] = (initial_data['FUELCONSUMPTION_HWY']-initial_data['FUELCONSUMPTION_HWY'].mean())/initial_data['FUELCONSUMPTION_HWY'].std()
+normalized_data['FUELCONSUMPTION_COMB'] = (initial_data['FUELCONSUMPTION_COMB']-initial_data['FUELCONSUMPTION_COMB'].mean())/initial_data['FUELCONSUMPTION_COMB'].std()
+normalized_data['FUELCONSUMPTION_COMB_MPG'] = (initial_data['FUELCONSUMPTION_COMB_MPG']-initial_data['FUELCONSUMPTION_COMB_MPG'].mean())/initial_data['FUELCONSUMPTION_COMB_MPG'].std()
+normalized_data['CO2EMISSIONS'] = (initial_data['CO2EMISSIONS']-initial_data['CO2EMISSIONS'].mean())/initial_data['CO2EMISSIONS'].std()
+print(normalized_data.to_string())
