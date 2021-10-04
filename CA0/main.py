@@ -85,4 +85,33 @@ normalized_data['FUELCONSUMPTION_HWY'] = (initial_data['FUELCONSUMPTION_HWY']-in
 normalized_data['FUELCONSUMPTION_COMB'] = (initial_data['FUELCONSUMPTION_COMB']-initial_data['FUELCONSUMPTION_COMB'].mean())/initial_data['FUELCONSUMPTION_COMB'].std()
 normalized_data['FUELCONSUMPTION_COMB_MPG'] = (initial_data['FUELCONSUMPTION_COMB_MPG']-initial_data['FUELCONSUMPTION_COMB_MPG'].mean())/initial_data['FUELCONSUMPTION_COMB_MPG'].std()
 normalized_data['CO2EMISSIONS'] = (initial_data['CO2EMISSIONS']-initial_data['CO2EMISSIONS'].mean())/initial_data['CO2EMISSIONS'].std()
-print(normalized_data.to_string())
+# print(normalized_data.to_string())
+
+pyplot.scatter(normalized_data['ENGINESIZE'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('ENGINESIZE')
+pyplot.ylabel('CO2EMISSIONS')
+pyplot.show()
+
+pyplot.scatter(normalized_data['CYLINDERS'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('CYLINDERS')
+pyplot.show()
+
+pyplot.scatter(normalized_data['FUELCONSUMPTION_CITY'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('FUELCONSUMPTION_CITY')
+pyplot.ylabel('CO2EMISSIONS')
+pyplot.show()
+
+pyplot.scatter(normalized_data['FUELCONSUMPTION_HWY'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('FUELCONSUMPTION_HWY')
+pyplot.ylabel('CO2EMISSIONS')
+pyplot.show()
+
+pyplot.scatter(normalized_data['FUELCONSUMPTION_COMB'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('FUELCONSUMPTION_COMB')
+pyplot.ylabel('CO2EMISSIONS')
+pyplot.show()
+
+pyplot.scatter(normalized_data['FUELCONSUMPTION_COMB_MPG'],normalized_data['CO2EMISSIONS'],c='#fc3503')
+pyplot.xlabel('FUELCONSUMPTION_COMB_MPG')
+pyplot.ylabel('CO2EMISSIONS')
+pyplot.show()
