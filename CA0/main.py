@@ -153,24 +153,36 @@ linear_data = pandas.concat(data, axis=1, keys=header)
 # b = numpy.linalg.inv(x_train).dot(y_train)
 # print(b)
 
-X, y = linear_data.values[:,0], linear_data.values[:,1]
-X = X.reshape((len(X), 1))
-# calculate coefficients
-b = numpy.linalg.pinv(X).dot(y)
-print(b)
-# predict using coefficients
-yhat = X.dot(b)
-# plot data and predictions
-pyplot.scatter(X, y)
-pyplot.plot(X, yhat, color='red')
-pyplot.show()
-m = (X[0]-X[1])/(yhat[0]-yhat[1])
-print(m)
-print(y[0]-(m*X[0]))
+# X, y = linear_data.values[:,0], linear_data.values[:,1]
+# X = X.reshape((len(X), 1))
+# # calculate coefficients
+# b = numpy.linalg.pinv(X).dot(y)
+# print(b)
+# # predict using coefficients
+# yhat = X.dot(b)
+# # plot data and predictions
+# pyplot.scatter(X, y)
+# pyplot.plot(X, yhat, color='red')
+# pyplot.show()
+# m = (X[0]-X[1])/(yhat[0]-yhat[1])
+# print(m)
+# print(y[0]-(m*X[0]))
+#
+# sum = 0
+# i = 0
+# for index,row in linear_data.iterrows():
+#     sum += (row['CO2EMISSIONS']-yhat[i]) ** 2
+#     i += 1
+# print(sum/i)
 
-sum = 0
-i = 0
-for index,row in linear_data.iterrows():
-    sum += (row['CO2EMISSIONS']-yhat[i]) ** 2
-    i += 1
-print(sum/i)
+x_train, y_train = linear_data.values[:, 0], linear_data.values[:, 1]
+x_train = x_train.reshape((len(x_train), 1))
+theta = numpy.linalg.inv(x_train.T.dot(x_train)).dot(x_train.T).dot(y_train)
+h = x_train.dot(theta)
+pyplot.scatter(x_train, y_train)
+pyplot.plot(x_train, h, color='red')
+pyplot.show()
+theta_1 = (x_train[0] - x_train[1]) / (h[0] - h[1])
+print(f"theta_0 = {h[0] - (theta_1 * x_train[0])[0]}")
+print(f"theta_1 = {theta_1[0]}")
+print(f"MSE = {sum((h - y_train) ** 2) / len(h)}")
