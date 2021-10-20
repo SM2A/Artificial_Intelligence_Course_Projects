@@ -1,5 +1,6 @@
 import enum
 import time
+import copy
 
 
 class Cell(enum.Enum):
@@ -12,72 +13,118 @@ class Cell(enum.Enum):
 
 
 temple = []
-spells = []
-final_path = []
-source = [(0, 0)]
+
+
+class doctor:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.path = [(x, y)]
+
+    def get_path(self):
+        return self.path
+
+    def get_position(self):
+        return self.path[-1]
+
+    def add_dest(self, x, y):
+        self.path[-1][0] += x
+        self.path[-1][1] += y
+
+    def __hash__(self):
+        return f"{self.id} : {self.path}"
+
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
+
+
+class state:
+    def __init__(self, doubles, potions, doctors, x, y):
+        self.doubles = doubles
+        self.potions = potions
+        self.doctors = doctors
+        self.x = x
+        self.y = y
+
+    def get_path(self):
+        path = []
+        for doc in self.doctors:
+            for pos in doc:
+                path.append(pos)
+        return path
+
+    def is_done(self):
+        done = True
+        if len(self.potions) != 0:
+            return False
+        for doc in self.doctors:
+            if doc.path[-1][-1] != (x, y):
+                return False
+        return done
+
+    def __str__(self):
+        result = ""
+        result += str(self.doubles)
+        result += " "
+        result += str(self.potions)
+        result += " "
+        for doc in self.doctors:
+            result += (doc.__hash__() + " ")
+        return result
+
+    def __hash__(self):
+        result = ""
+        result += str(self.doubles)
+        result += " "
+        result += str(self.potions)
+        result += " "
+        for doc in self.doctors:
+            result += (doc.__hash__() + " ")
+        return result.__hash__()
+
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
+
+
 move = ((1, 0), (0, 1), (-1, 0), (0, -1))
 
 
-# def bfs(s):
-#     visited = []
-#     queue = [[s]]
-#     global spells
-#     while queue:
-#         path = queue.pop(0)
-#         node = path[-1]
-#         if node not in visited:
-#             for adj in move:
-#                 x = node[0] + adj[0]
-#                 y = node[1] + adj[1]
-#                 if x >= int(n) or x < 0 or y >= int(m) or y < 0:
-#                     continue
-#                 if temple[x][y] == Cell.wall:
-#                     continue
-#                 if (x, y) not in visited:
-#                     new_path = list(path)
-#                     new_path.append((x, y))
-#                     queue.append(new_path)
-#                     print(new_path)
-#                     if temple[x][y] == Cell.end:
-#                         print(set(spells).issubset(set(new_path)))
-#                         print(new_path, end=f" len : {len(new_path)}\n")
-#                         return
-#                     if temple[x][y] == Cell.potion:
-#                         temple[x][y] = Cell.empty
-#                     if temple[x][y] == Cell.double:
-#                         temple[x][y] = Cell.empty
-#                         source.append((int(m) - 1, 0))
-#             visited.append(node)
+def next_state(frontier, visited):
+    ns = []
+    for i in range(len(frontier)):
+        for j in range(len(frontier[i].doctors)):
+            for adj in move:
+                new_s = copy.deepcopy(frontier[i])
+                pos = new_s.doctors[j].path[-1]
+                new_pos = (pos[0] + adj[0], pos[1] + adj[1])
+                new_s.doctors[j].path.append(new_pos)
+                if new_pos[0] >= int(new_s.y) or new_pos[0] < 0 or new_pos[1] >= int(new_s.x) or new_pos[1] < 0:
+                    continue
+                elif temple[new_pos[0]][new_pos[1]] == Cell.wall:
+                    continue
+                if (j, pos, new_pos) not in visited:
+                    ns.append(new_s)
+                    visited.add((j, pos, new_pos))
+    return ns
 
 
-def bfs(s):
-    visited = []
-    queue = [[s]]
-    global spells, x, y
+def bfs(initial):
+    visited = set()
+    queue = [initial]
     while queue:
-        path = queue.pop(0)
-        node = path[-1]
-        for adj in move:
-            x = node[0] + adj[0]
-            y = node[1] + adj[1]
-            if x >= int(n) or x < 0 or y >= int(m) or y < 0:
-                continue
-            if temple[x][y] == Cell.wall:
-                continue
-            if (node, (x, y)) not in visited:
-                new_path = list(path)
-                new_path.append((x, y))
-                queue.append(new_path)
-                if temple[x][y] == Cell.end and set(spells).issubset(set(new_path)):
-                    print(new_path, end=f" len : {len(new_path)}\n")
-                    spells = []
-                    return
-                if temple[x][y] == Cell.potion:
-                    temple[x][y] = Cell.empty
-                if temple[x][y] == Cell.double:
-                    temple[x][y] = Cell.empty
-                    source.append((int(m) - 1, 0))
-        visited.append((node, (x, y)))
+        queue = next_state(queue, visited)
+        for f in queue:
+            print(f.__str__())
+            for doc in f.doctors:
+                x = doc.path[-1][0]
+                y = doc.path[-1][1]
+                if temple[x][y] == Cell.potion and (x, y) in f.potions:
+                    f.potions.remove((x, y))
+                if temple[x][y] == Cell.double and (x, y) in f.doubles:
+                    new_doc = doctor(len(f.doctors) + 1, int(f.x) - 1, 0)
+                    f.doctors.append(new_doc)
+                    f.doubles.remove((x, y))
+                if f.is_done():
+                    return f
 
 
 if __name__ == '__main__':
@@ -91,14 +138,17 @@ if __name__ == '__main__':
     temple[0][0] = Cell.start
     temple[int(n) - 1][int(m) - 1] = Cell.end
 
+    potion = []
     for i in range(int(c)):
         x, y = file.readline().split()
         temple[int(x)][int(y)] = Cell.potion
-        spells.append((int(x), int(y)))
+        potion.append((int(x), int(y)))
 
+    double = []
     for i in range(int(k)):
         x, y = file.readline().split()
         temple[int(x)][int(y)] = Cell.double
+        double.append((int(x), int(y)))
 
     d = file.readline()
 
@@ -106,11 +156,9 @@ if __name__ == '__main__':
         x, y = file.readline().split()
         temple[int(x)][int(y)] = Cell.wall
 
-    doc = 1
+    doc = doctor(1, 0, 0)
+    initial_state = state(double, potion, [doc], int(n) - 1, int(m) - 1)
     begin = time.time()
-    for start in source:
-        print(doc, end=" : ")
-        bfs(start)
-        doc += 1
-
+    result = bfs(initial_state)
+    print(result.__str__())
     print(f"Executed in {time.time() - begin} seconds")
