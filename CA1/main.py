@@ -35,7 +35,7 @@ class State:
         result = ""
         for index in range(len(doc)):
             doc[index].reverse()
-            result += f"Doctor {index} : {doc[index]} Length = {len(doc[index])-1}\n"
+            result += f"Doctor {index + 1} : {doc[index]} Length = {len(doc[index]) - 1}\n"
         return result
 
     def is_done(self):
@@ -111,37 +111,44 @@ def bfs(initial):
         queue = next_state(queue, visited)
 
 
-if __name__ == '__main__':
+result = []
+test_time = []
+for test in 1, 2, 3:
+    test_time.append([])
+    for r in 1, 2, 3:
+        file = open(f'Tests/test{test}.in')
+        n, m = file.readline().split()
+        c, k = file.readline().split()
 
-    file = open('test2.in')
-    n, m = file.readline().split()
-    c, k = file.readline().split()
+        temple = [[Cell.empty for x in range(int(n))] for y in range(int(m))]
 
-    temple = [[Cell.empty for x in range(int(n))] for y in range(int(m))]
+        temple[0][0] = Cell.start
+        temple[int(n) - 1][int(m) - 1] = Cell.end
 
-    temple[0][0] = Cell.start
-    temple[int(n) - 1][int(m) - 1] = Cell.end
+        potion = []
+        for i in range(int(c)):
+            x, y = file.readline().split()
+            temple[int(x)][int(y)] = Cell.potion
+            potion.append((int(x), int(y)))
 
-    potion = []
-    for i in range(int(c)):
-        x, y = file.readline().split()
-        temple[int(x)][int(y)] = Cell.potion
-        potion.append((int(x), int(y)))
+        double = []
+        for i in range(int(k)):
+            x, y = file.readline().split()
+            temple[int(x)][int(y)] = Cell.double
+            double.append((int(x), int(y)))
 
-    double = []
-    for i in range(int(k)):
-        x, y = file.readline().split()
-        temple[int(x)][int(y)] = Cell.double
-        double.append((int(x), int(y)))
+        d = file.readline()
 
-    d = file.readline()
+        for i in range(int(d)):
+            x, y = file.readline().split()
+            temple[int(x)][int(y)] = Cell.wall
 
-    for i in range(int(d)):
-        x, y = file.readline().split()
-        temple[int(x)][int(y)] = Cell.wall
-
-    initial_state = State(double, potion, [(0, 0)], None)
-    begin = time.time()
-    result = bfs(initial_state)
-    print(f"Executed in {time.time() - begin} seconds")
-    print(result.print_path())
+        initial_state = State(double, potion, [(0, 0)], None)
+        begin = time.time()
+        res = bfs(initial_state)
+        test_time[test - 1].append(time.time() - begin)
+        if len(result) == test - 1:
+            result.append(res)
+    print(f"Average execution time of test{test}.in is : {sum(test_time[test - 1]) / len(test_time[test - 1])} seconds")
+    print("Optimal path is :")
+    print(result[test - 1].print_path())
