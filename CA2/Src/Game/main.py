@@ -5,8 +5,8 @@ from minimax.minimax import minimax
 
 FPS = 60
 
-WHITE_DEPTH = 3
-RED_DEPTH = 3
+WHITE_DEPTH = 5
+RED_DEPTH = 5
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Checkers')
