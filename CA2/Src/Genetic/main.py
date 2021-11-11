@@ -50,9 +50,9 @@ def random_board(board):
 
 
 # todo fix this function
-def selection(population, fitness_population, populn_num):
+def selection(population, fitness_population, size):
     sorted_population = sorted(zip(population, fitness_population), key=lambda ind_fit: ind_fit[1])
-    return [individual for individual, fitness in sorted_population[int(populn_num * 0.2):]]
+    return [individual for individual, fitness in sorted_population[int(size * 0.2):]]
 
 
 def crossover(population, size):
@@ -117,8 +117,6 @@ def check_inference(board, i, j):
             if row == i and column == j:
                 continue
             if board[i][j] == board[row][column]:
-                # print_board(board)
-                # print(f"{i} -- {j}")
                 return True
 
     return False
@@ -142,21 +140,18 @@ def fitness_scale(population):
 
 
 if __name__ == "__main__":
-    board = read_table("Test\Test1.txt")
+    board = read_table("Test\Test2.txt")
 
-    # population_size = 200
-    population_size = random.randint(100, 1000)
+    population_size = 200
     iteration = 0
 
     population = population_init(board, population_size)
     population_fitness = fitness_scale(population)
 
-    while iteration < (population_size * 5):
-        # while iteration < 1000:
+    while iteration < 1000:
         iteration += 1
         parents = selection(population, population_fitness, population_size)
         child = crossover(parents, population_size)
         population = mutation(child, board)
         population_fitness = fitness_scale(population)
         max_fitness = sorted(population_fitness)[-1]
-        print("Gen:", iteration, "& Max fit %d" % sorted(population_fitness)[-1])
