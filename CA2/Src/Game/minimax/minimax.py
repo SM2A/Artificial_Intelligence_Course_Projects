@@ -1,5 +1,6 @@
-from copy import deepcopy
 import pygame
+import copy
+import time
 
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
@@ -12,22 +13,30 @@ def minimax(position, depth, maxPlayer, game):
 
     if maxPlayer:
         max_val = float('-inf')
-        best_move = None
+        next_move = None
         for move in getAllMoves(position, WHITE):
-            evaluated = minimax(move, depth - 1, False, game)[0]
-            max_val = max(max_val, evaluated)
-            if max_val == evaluated:
-                best_move = move
-        return max_val, best_move
+            eval = minimax(move, depth - 1, False, game)[0]
+            max_val = max(max_val, eval)
+            if max_val == eval:
+                next_move = move
+        if next_move is None:
+            print("Red is winner")
+            time.sleep(5)
+            exit(0)
+        return max_val, next_move
     else:
         min_val = float('inf')
-        best_move = None
+        next_move = None
         for move in getAllMoves(position, RED):
-            evaluated = minimax(move, depth - 1, True, game)[0]
-            min_val = min(min_val, evaluated)
-            if min_val == evaluated:
-                best_move = move
-        return min_val, best_move
+            eval = minimax(move, depth - 1, True, game)[0]
+            min_val = min(min_val, eval)
+            if min_val == eval:
+                next_move = move
+        if next_move is None:
+            print("White is winner")
+            time.sleep(5)
+            exit(0)
+        return min_val, next_move
 
 
 def simulateMove(piece, move, board, skip):
@@ -42,7 +51,7 @@ def getAllMoves(board, color):
     for piece in board.getAllPieces(color):
         valid_moves = board.getValidMoves(piece)
         for move, jump in valid_moves.items():
-            copy_board = deepcopy(board)
+            copy_board = copy.deepcopy(board)
             copy_piece = copy_board.getPiece(piece.row, piece.col)
             new_board = simulateMove(copy_piece, move, copy_board, jump)
             all_moves.append(new_board)
