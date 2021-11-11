@@ -3,8 +3,8 @@ from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, WHITE
 from checkers.game import Game
 from minimax.minimax import minimax
 
-WHITE_DEPTH = 1
-RED_DEPTH = 1
+WHITE_DEPTH = 2
+RED_DEPTH = 5
 FPS = 60
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))

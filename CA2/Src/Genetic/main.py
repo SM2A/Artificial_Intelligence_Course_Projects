@@ -154,4 +154,3 @@ if __name__ == "__main__":
         child = crossover(parents, population_size)
         population = mutation(child, board)
         population_fitness = fitness_scale(population)
-        max_fitness = sorted(population_fitness)[-1]
