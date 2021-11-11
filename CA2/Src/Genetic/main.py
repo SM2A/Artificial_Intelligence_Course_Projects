@@ -49,24 +49,23 @@ def random_board(board):
     return table
 
 
-# todo fix this function
 def selection(population, fitness_population, size):
     sorted_population = sorted(zip(population, fitness_population), key=lambda ind_fit: ind_fit[1])
     return [individual for individual, fitness in sorted_population[int(size * 0.2):]]
 
 
 def crossover(population, size):
-    a = []
+    next_gen = []
     for i in range(size):
-        a.append(_crossover_(random.choice(population), random.choice(population)))
-    return a
+        next_gen.append(_crossover_(random.choice(population), random.choice(population)))
+    return next_gen
 
 
 def _crossover_(parent1, parent2):
-    a = []
+    chromosome = []
     for child_pair in zip(parent1, parent2):
-        a.append(list(random.choice(child_pair)))
-    return a
+        chromosome.append(list(random.choice(child_pair)))
+    return chromosome
 
 
 def mutation(population, board):
