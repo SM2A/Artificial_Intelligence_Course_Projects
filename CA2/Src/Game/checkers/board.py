@@ -84,11 +84,15 @@ class Board:
     def getValidMoves(self, piece):
         valid_moves = {}
         if (piece.color == WHITE) or piece.king:
-            valid_moves.update(self._traverseLeft(piece.row + 1, min(piece.row + 3, ROWS), 1, piece.color, piece.col - 1))
-            valid_moves.update(self._traverseRight(piece.row + 1, min(piece.row + 3, ROWS), 1, piece.color, piece.col + 1))
+            valid_moves.update(self._traverseLeft(piece.row + 1, min(piece.row + 3, ROWS),
+                                                  1, piece.color, piece.col - 1))
+            valid_moves.update(self._traverseRight(piece.row + 1, min(piece.row + 3, ROWS),
+                                                   1, piece.color, piece.col + 1))
         if (piece.color == RED) or piece.king:
-            valid_moves.update(self._traverseLeft(piece.row - 1, max(piece.row - 3, -1), -1, piece.color, piece.col - 1))
-            valid_moves.update(self._traverseRight(piece.row - 1, max(piece.row - 3, -1), -1, piece.color, piece.col + 1))
+            valid_moves.update(self._traverseLeft(piece.row - 1, max(piece.row - 3, -1),
+                                                  -1, piece.color, piece.col - 1))
+            valid_moves.update(self._traverseRight(piece.row - 1, max(piece.row - 3, -1),
+                                                   -1, piece.color, piece.col + 1))
 
         return valid_moves
 
