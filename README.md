@@ -4,4 +4,5 @@ This repository contains my Artificial Intelligence course projects (Fall 2021) 
 1. CA0 : Introduction to pandas, numpy, and matplotlib libraries
 2. CA1 : Informed and Uninformed search algorithms 
 3. CA2 : Hands-on game (minimax) and genetic algorithms
-3. CA3 : Naive Bayes Classification
+4. CA3 : Naive Bayes classification
+5. CA4 : Machine Learning
