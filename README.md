@@ -6,3 +6,4 @@ This repository contains my Artificial Intelligence course projects (Fall 2021) 
 3. CA2 : Hands-on game (minimax) and genetic algorithms
 4. CA3 : Naive Bayes classification
 5. CA4 : Machine Learning intro
+6. CA5 : Neural Networks
